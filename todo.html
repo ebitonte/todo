@@ -21,25 +21,28 @@
             </footer>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script> src="node_modules/hogan/node_modules/hogan.js"</script
+        <script src="node_modules/hogan/node_modules/hogan.js/dist/hogan-3.0.2.js"></script>
         <script type="text/javascript" src="lib/underscore.js"></script>
         <script type="text/javascript" src="lib/backbone.js"></script>
 		<script type="text/javascript" src="lib/backbone.localStorage.js"></script>
 		<script src='todos.js'></script>
-        <script type='text/template' id='item-template'>
+        <script type='x-tmpl-mustache' id='item-template'>
             <div class='view'>
-                <input class='toggle' type='checkbox' <%= done ? 'checked="checked"' : ''%> />
-                <label><%= title %></label>
-                <a class='destory'></a>
+                <input class='toggle' type='checkbox'
+                    {{#done}}
+                    checked='checked'
+                    {{/done}} />
+                <label> {{title}} </label>
+                <a class='destroy'></a>
             </div>
-            <input class='edit' type='text' value=<%= title%> />
+            <input class='edit' type='text' value= {{title}} />
         </script>
-        <script type='text/template' id='stats-template'>
-            <% if (done) { %>
-                <a id="clear-completed"> Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
-                <% } %>
-                <div class='todo-count'><b><%= remaining %></b>
-                <%= remaining == 1 ? 'item' : 'items' %> left </div>
+        <script type='x-tmpl-mustache' id='stats-template'>
+                {{#done}}
+                <a id="clear-completed"> Clear {{done}} completed {{items}}</a>
+                {{/done}}
+                <div class='todo-count'><b>{{remaining}} remaining</b>
+                {{items}} left </div>
         </script>
 	</body>
 </html>

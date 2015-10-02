@@ -30,12 +30,11 @@ $(function() {
         comparator: 'order'
     });
 
-
     var Todos = new TodoList;
 
     var TodoView = Backbone.View.extend({
         tagName: 'li',
-        template: _.template($('#item-template').html()),
+        template: Hogan.compile($('#item-template').html()),
         events: {
             "click .toggle" : "toggleDone",
             "dblclick .view" : "edit",
@@ -50,7 +49,7 @@ $(function() {
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            this.$el.html(this.template.render(this.model.toJSON()));
             this.$el.toggleClass('done', this.model.get('done'));
             this.input = this.$('.edit');
             return this;
@@ -86,7 +85,7 @@ $(function() {
 
     var AppView = Backbone.View.extend({
         el:$("#todoapp"),
-        statsTemplate: _.template($('#stats-template').html()),
+        statsTemplate: Hogan.compile($('#stats-template').html()),
 
         events: {
             "keypress #new-todo": "createOnEnter",
@@ -115,7 +114,13 @@ $(function() {
             if (Todos.length) {
                 this.main.show();
                 this.footer.show();
-                this.footer.html(this.statsTemplate({done: done, remaining: remaining}));
+                this.footer.html(this.statsTemplate.render({done: done, remaining: remaining, items: function() {
+                        if (remaining > 1)
+                            return "items";
+                        else 
+                            return "item";
+                    }
+                }));
             } else {
                 this.main.hide();
                 this.footer.hide();
